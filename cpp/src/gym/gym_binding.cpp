@@ -161,7 +161,15 @@ public:
 
 		CURLcode r = curl_easy_perform(h.get());
 
-
+		// temporary fix, todo debug the server than sometimes cannot handle the request
+        int errorCount=0;
+        while (r && errorCount<10){
+            errorCount++;
+            usleep(2000000); // waiting x microseconds
+            if (verbose)
+            std::cerr<<"a connection attempt failed, trial "<<std::to_string(errorCount)<<"..."<<std::endl;
+            r = curl_easy_perform(h.get());
+        }
 		if (r) {
 		    throw std::runtime_error(curl_error_buf.data());
 		}
