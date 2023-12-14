@@ -11,6 +11,6 @@ In order to run this project, start the python server component with:
 $ cd server-python
 $ python3 gym_http_server.py
 ```
-Then build and execute cas739_project_001225727 using cmake.
+Then build and execute cas739_project_001225727 using cmake. The ```top-few-tpg``` build target runs my top-few tpg implementation for simultaneous inputs, while the ```single-tpg``` build target will run the typical tpg for the standard action space.
 
 If you encounter any installation issues, please see the original repository.
