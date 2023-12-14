@@ -1,5 +1,5 @@
-Flask==0.11.1
-numpy==1.11.2
-gym==0.7.4
-requests==2.11.0
+Flask
+numpy
+gym[atari,accept-rom-license]
+requests
 pytest
