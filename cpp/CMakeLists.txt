@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-set (PROJECT_NAME cas739_project_001225727)
+set (PROJECT_NAME top-few-tpg)
 
 include(FetchContent)
 
@@ -26,7 +26,7 @@ find_package(GEGELATI)
 if(NOT GEGELATI_FOUND)
         FetchContent_Declare(
                 GEGELATI
-                GIT_REPOSITORY https://github.com/myrithok/cas739_project_001225727_gegelati.git
+                GIT_REPOSITORY ttps://github.com/myrithok/top-few-tpg-gegelati.git
         )
         FetchContent_MakeAvailable(GEGELATI)
 endif()
@@ -52,3 +52,10 @@ add_executable(${PROJECT_NAME} ${gym_wrapper_files})
 target_link_libraries(${PROJECT_NAME} ${CURL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${GEGELATI_LIBRARIES})
 target_compile_definitions(${PROJECT_NAME} PRIVATE ROOT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+target_compile_definitions(${PROJECT_NAME} PRIVATE TOP_FEW=true)
+
+add_executable(single-tpg ${gym_wrapper_files})
+target_link_libraries(single-tpg ${CURL_LIBRARIES})
+target_link_libraries(single-tpg ${GEGELATI_LIBRARIES})
+target_compile_definitions(single-tpg PRIVATE ROOT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+target_compile_definitions(single-tpg PRIVATE TOP_FEW=false)

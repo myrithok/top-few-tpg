@@ -9,77 +9,81 @@ void GymWrapper::initialize(std::string chosenEnv) {
 void GymWrapper::doAction(std::vector<uint64_t> actionIDs) {
     Gym::State s;
     // Calculate the final action input by mixing the top 3 reported actions
-    bool fire = false;
-    bool up = false;
-    bool right = false;
-    bool left = false;
-    bool down = false;
     uint64_t actionID = 0;
-    for (int i; i < 3; i++) {
-        switch (actionIDs[i]) {
-            case 1:
-                fire = true;
+    if (TOP_FEW) {
+        bool fire = false;
+        bool up = false;
+        bool right = false;
+        bool left = false;
+        bool down = false;
+        for (int i; i < 3; i++) {
+            switch (actionIDs[i]) {
+                case 1:
+                    fire = true;
                 break;
-            case 2:
-                up = true;
+                case 2:
+                    up = true;
                 break;
-            case 3:
-                right = true;
+                case 3:
+                    right = true;
                 break;
-            case 4:
-                left = true;
+                case 4:
+                    left = true;
                 break;
-            case 5:
-                down = true;
+                case 5:
+                    down = true;
                 break;
+            }
         }
-    }
-    if (right && left) {
-        right = false;
-        left = false;
-    }
-    if (up && down) {
-        up = false;
-        down = false;
-    }
-    if (!fire) {
-        if (left && !right && !down && !up) {
-            actionID = 4;
-        } else if (!left && right && !down && !up) {
-            actionID = 3;
-        } else if (!left && !right && down && !up) {
-            actionID = 5;
-        } else if (!left && !right && !down && up) {
-            actionID = 2;
-        } else if (left && !right && down && !up) {
-            actionID = 9;
-        } else if (left && !right && !down && up) {
-            actionID = 7;
-        } else if (!left && right && down && !up) {
-            actionID = 8;
-        } else if (!left && right && !down && up) {
-            actionID = 6;
+        if (right && left) {
+            right = false;
+            left = false;
+        }
+        if (up && down) {
+            up = false;
+            down = false;
+        }
+        if (!fire) {
+            if (left && !right && !down && !up) {
+                actionID = 4;
+            } else if (!left && right && !down && !up) {
+                actionID = 3;
+            } else if (!left && !right && down && !up) {
+                actionID = 5;
+            } else if (!left && !right && !down && up) {
+                actionID = 2;
+            } else if (left && !right && down && !up) {
+                actionID = 9;
+            } else if (left && !right && !down && up) {
+                actionID = 7;
+            } else if (!left && right && down && !up) {
+                actionID = 8;
+            } else if (!left && right && !down && up) {
+                actionID = 6;
+            }
+        } else {
+            if (!left && !right && !down && !up) {
+                actionID = 1;
+            } else if (left && !right && !down && !up) {
+                actionID = 12;
+            } else if (!left && right && !down && !up) {
+                actionID = 11;
+            } else if (!left && !right && down && !up) {
+                actionID = 13;
+            } else if (!left && !right && !down && up) {
+                actionID = 10;
+            } else if (left && !right && down && !up) {
+                actionID = 17;
+            } else if (left && !right && !down && up) {
+                actionID = 15;
+            } else if (!left && right && down && !up) {
+                actionID = 16;
+            } else if (!left && right && !down && up) {
+                actionID = 14;
+            }
         }
     } else {
-        if (!left && !right && !down && !up) {
-            actionID = 1;
-        } else if (left && !right && !down && !up) {
-            actionID = 12;
-        } else if (!left && right && !down && !up) {
-            actionID = 11;
-        } else if (!left && !right && down && !up) {
-            actionID = 13;
-        } else if (!left && !right && !down && up) {
-            actionID = 10;
-        } else if (left && !right && down && !up) {
-            actionID = 17;
-        } else if (left && !right && !down && up) {
-            actionID = 15;
-        } else if (!left && right && down && !up) {
-            actionID = 16;
-        } else if (!left && right && !down && up) {
-            actionID = 14;
-        }
+        actionID = actionIDs[0];
     }
     std::vector<float> action({(float) actionID});
     env->step(action, false, &s);
