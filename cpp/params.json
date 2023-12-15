@@ -1,5 +1,5 @@
 {
-  "nbGenerations" : 100,
+  "nbGenerations" : 50,
   "archiveSize" : 0,
   "archivingProbability" : 0,
   "nbIterationsPerPolicyEvaluation" : 1,
