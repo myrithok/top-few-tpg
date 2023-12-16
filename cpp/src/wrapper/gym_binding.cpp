@@ -286,6 +286,8 @@ namespace Gym {
     boost::shared_ptr<Environment> ClientReal::make(const std::string& env_id) {
         Json::Value req;
         req["env_id"] = env_id;
+        req["seed"] = SEED;
+        req["render"] = RENDER;
         Json::Value ans = POST("/v1/envs/", req.toStyledString());
         std::string instance_id = require(ans, "instance_id");
         if (verbose) printf(" * created %s instance_id=%s\n", env_id.c_str(), instance_id.c_str());

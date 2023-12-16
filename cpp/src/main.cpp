@@ -37,9 +37,6 @@ int main() {
     // Loads them from "params.json" file
     Learn::LearningParameters params;
     File::ParametersParser::loadParametersFromJson(ROOT_DIR "/params.json", params);
-#ifdef NB_GENERATIONS
-	params.nbGenerations = NB_GENERATIONS;
-#endif // !NB_GENERATIONS
 
 
     // Instantiate the LearningEnvironment
@@ -82,8 +79,6 @@ int main() {
     for (unsigned int i = 0; i < set.getNbInstructions(); i++) {
         delete (&set.getInstruction(i));
     }
-
-    // if we want to test the best agent
 
     return 0;
 }

@@ -38,14 +38,14 @@ protected:
     /// Randomness control
     Mutator::RNG rng;
 
-    /// maximum reached distance for mountain car
-    float maxDistance;
-
     /// Initializes the env of simulation and returns size of action space
     virtual void initialize(std::string chosenEnv);
 
     /// nb of parameters from the gym output vector that we want to look at
     int parametersToObserve;
+
+    /// Used to cause reset on "game over" state
+    bool done;
 
 public:
     /**

@@ -4,6 +4,7 @@ void GymWrapper::initialize(std::string chosenEnv) {
     this->envName = chosenEnv;
     this->client = Gym::client_create("127.0.0.1", 5000);
     this->env = client->make(this->envName);
+    this->done = false;
 }
 
 void GymWrapper::doAction(std::vector<uint64_t> actionIDs) {
@@ -20,19 +21,19 @@ void GymWrapper::doAction(std::vector<uint64_t> actionIDs) {
             switch (actionIDs[i]) {
                 case 1:
                     fire = true;
-                break;
+                    break;
                 case 2:
                     up = true;
-                break;
+                    break;
                 case 3:
                     right = true;
-                break;
+                    break;
                 case 4:
                     left = true;
-                break;
+                    break;
                 case 5:
                     down = true;
-                break;
+                    break;
             }
         }
         if (right && left) {
@@ -91,10 +92,10 @@ void GymWrapper::doAction(std::vector<uint64_t> actionIDs) {
     for (int i = 0; i < this->parametersToObserve; i++) {
         this->state.setDataAt(typeid(float), i, s.observation[i]);
     }
-    this->reward += s.observation[0]; // add current position
-    if (s.observation[0] > maxDistance) {
-        maxDistance = s.observation[0];
-    }
+
+    this->reward += s.reward;
+    this->done = s.done;
+
     this->turn++;
 }
 
@@ -109,7 +110,7 @@ void GymWrapper::reset(size_t seed, Learn::LearningMode mode) {
     }
     this->turn = 0;
     this->reward = 0;
-    this->maxDistance = -std::numeric_limits<float>::max();
+    this->done = false;
     this->client.reset();
 
 
@@ -126,7 +127,7 @@ std::vector<std::reference_wrapper<const Data::DataHandler>> GymWrapper::getData
 }
 
 bool GymWrapper::isTerminal() const {
-    return false;
+    return this->done;
 }
 
 bool GymWrapper::isCopyable() const {
@@ -139,5 +140,5 @@ Learn::LearningEnvironment *GymWrapper::clone() const {
 }*/
 
 double GymWrapper::getScore() const {
-    return this->maxDistance;
+    return this->reward;
 }

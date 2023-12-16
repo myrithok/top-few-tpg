@@ -30,7 +30,7 @@ class Envs(object):
     def __init__(self):
         self.envs = {}
         self.id_len = 8
-        #self.step_count = 0
+        # self.step_count = 0
 
     def _lookup_env(self, instance_id):
         try:
@@ -44,9 +44,12 @@ class Envs(object):
         except KeyError:
             raise InvalidUsage('Instance_id {} unknown'.format(instance_id))
 
-    def create(self, env_id, seed=None):
+    def create(self, env_id, seed=None, render=False):
         try:
-            env = gym.make(env_id)
+            if render:
+                env = gym.make(env_id, render_mode='human')
+            else:
+                env = gym.make(env_id)
             if seed:
                 env.seed(seed)
         except gym.error.Error:
@@ -62,8 +65,8 @@ class Envs(object):
     def reset(self, instance_id):
         env = self._lookup_env(instance_id)
         obs = env.reset()[0]
-        #self.step_count = 0
-        #print("env {} step {} : reset".format(instance_id, self.step_count))
+        # self.step_count = 0
+        # print("env {} step {} : reset".format(instance_id, self.step_count))
         return env.observation_space.to_jsonable(obs)
 
     def step(self, instance_id, action, render):
@@ -76,8 +79,8 @@ class Envs(object):
             env.render()
         [observation, reward, done, truncated, info] = env.step(nice_action)
         obs_jsonable = env.observation_space.to_jsonable(observation)
-        #self.step_count += 1
-        #print("env {} step {} : action {} reward {}".format(instance_id, self.step_count, action, reward))
+        # self.step_count += 1
+        # print("env {} step {} : action {} reward {}".format(instance_id, self.step_count, action, reward))
         return [obs_jsonable, reward, done, info]
 
     def get_action_space_contains(self, instance_id, x):
@@ -222,7 +225,8 @@ def env_create():
     """
     env_id = get_required_param(request.get_json(), 'env_id')
     seed = get_optional_param(request.get_json(), 'seed', None)
-    instance_id = envs.create(env_id, seed)
+    render = get_optional_param(request.get_json(), 'render', False)
+    instance_id = envs.create(env_id, seed, render)
     return jsonify(instance_id=instance_id)
 
 
