@@ -60,7 +60,7 @@ target_link_libraries(single-tpg ${CURL_LIBRARIES})
 target_link_libraries(single-tpg ${GEGELATI_LIBRARIES})
 target_compile_definitions(single-tpg PRIVATE ROOT_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 target_compile_definitions(single-tpg PRIVATE TOP_FEW=false)
-target_compile_definitions(${PROJECT_NAME} PRIVATE RENDER=false)
+target_compile_definitions(single-tpg PRIVATE RENDER=false)
 
 add_executable(${PROJECT_NAME}-render ${gym_wrapper_files})
 target_link_libraries(${PROJECT_NAME}-render ${CURL_LIBRARIES})
