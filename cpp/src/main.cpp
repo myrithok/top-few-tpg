@@ -105,6 +105,9 @@ int evaluate() {
     Learn::LearningAgent la(le, set, params);
     la.init();
 
+    // Create an exporter to export graphs
+    File::TPGGraphDotExporter exporter("test", *la.getTPGGraph());
+
     // Iterate through all of the exported TPGs in the eval directory
     using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
     for (const auto& dirEntry: recursive_directory_iterator(ROOT_DIR "/eval")) {
@@ -116,8 +119,11 @@ int evaluate() {
         auto validationResults = la.evaluateAllRoots(0, Learn::LearningMode::VALIDATION);
         for (auto const& x: validationResults) {
             // Output the results
-            std::cout << dirEntry.path().stem().string() << ": " << x.first.get()->getResult() << "\n";
+            std::cout << dirEntry.path().stem().string() << " root " << x.second << ": " << x.first.get()->getResult() << "\n";
         }
+        la.keepBestPolicy();
+        exporter.setNewFilePath((std::string(ROOT_DIR) + "/eval/" + dirEntry.path().stem().string() + "_best.dot").c_str());
+        exporter.print();
     }
     return 0;
 }
